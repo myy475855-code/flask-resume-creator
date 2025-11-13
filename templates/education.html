@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">Education</h2>
+<p class="text-muted mb-4">Add your educational qualifications. You can skip this section if you don't want to include it.</p>
+
+<form method="POST">
+  <div id="eduContainer"></div>
+
+  <button type="button" class="btn btn-outline-primary mb-3" id="addEduBtn">+ Add Education</button>
+  <br>
+
+  <input type="hidden" name="education_count" id="education_count" value="0">
+
+  <button type="submit" class="btn btn-primary">Next: Experience</button>
+  <button type="button" class="btn btn-secondary ms-2" id="skipEduBtn">Skip</button>
+</form>
+
+<script>
+  const eduContainer = document.getElementById('eduContainer');
+  const addEduBtn = document.getElementById('addEduBtn');
+  const skipEduBtn = document.getElementById('skipEduBtn');
+  const eduCountInput = document.getElementById('education_count');
+  let eduCount = 0;
+
+  function addEduField() {
+    eduCount++;
+    eduCountInput.value = eduCount;
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+    div.innerHTML = `
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">School / University</label>
+          <input type="text" class="form-control" name="school_${eduCount}" placeholder="XYZ University" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Degree</label>
+          <input type="text" class="form-control" name="degree_${eduCount}" placeholder="B.Sc in Computer Science" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">GPA / Score</label>
+          <input type="text" class="form-control" name="gpa_${eduCount}" placeholder="3.8/4.0">
+        </div>
+        <div class="col-md-1">
+          <label class="form-label">Start Year</label>
+          <input type="number" class="form-control" name="start_${eduCount}" placeholder="2019">
+        </div>
+        <div class="col-md-1">
+          <label class="form-label">End Year</label>
+          <input type="number" class="form-control" name="end_${eduCount}" placeholder="2023">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Notes / Achievements</label>
+          <textarea class="form-control" name="notes_${eduCount}" rows="2" placeholder="Awards, achievements, or description"></textarea>
+        </div>
+        <div class="col-12 text-end">
+          <button type="button" class="btn btn-outline-danger btn-sm removeEduBtn">Remove</button>
+        </div>
+      </div>
+    `;
+    eduContainer.appendChild(div);
+
+    div.querySelector('.removeEduBtn').addEventListener('click', () => {
+      div.remove();
+      eduCount--;
+      eduCountInput.value = eduCount;
+    });
+  }
+
+  addEduBtn.addEventListener('click', addEduField);
+  addEduField(); // Add one default education entry
+
+  skipEduBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('experience') }}";
+  });
+</script>
+{% endblock %}

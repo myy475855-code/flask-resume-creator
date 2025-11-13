@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">Languages</h2>
+<p class="text-muted mb-4">Add the languages you know and your proficiency. You can skip this section if you want.</p>
+
+<form method="POST">
+  <div id="langContainer"></div>
+
+  <button type="button" class="btn btn-outline-primary mb-3" id="addLangBtn">+ Add Language</button>
+  <br>
+
+  <input type="hidden" name="languages_count" id="languages_count" value="0">
+
+  <button type="submit" class="btn btn-primary">Next: Projects</button>
+  <button type="button" class="btn btn-secondary ms-2" id="skipLangBtn">Skip</button>
+</form>
+
+<script>
+  const langContainer = document.getElementById('langContainer');
+  const addLangBtn = document.getElementById('addLangBtn');
+  const skipLangBtn = document.getElementById('skipLangBtn');
+  const langCountInput = document.getElementById('languages_count');
+  let langCount = 0;
+
+  function addLangField() {
+    langCount++;
+    langCountInput.value = langCount;
+
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+    div.innerHTML = `
+      <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Language</label>
+          <input type="text" class="form-control" name="language_${langCount}" placeholder="English" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Proficiency</label>
+          <select class="form-select" name="level_${langCount}">
+            <option value="Basic">Basic</option>
+            <option value="Conversational">Conversational</option>
+            <option value="Fluent">Fluent</option>
+            <option value="Native">Native</option>
+          </select>
+        </div>
+        <div class="col-md-2 text-end">
+          <button type="button" class="btn btn-outline-danger btn-sm removeLangBtn">Remove</button>
+        </div>
+      </div>
+    `;
+    langContainer.appendChild(div);
+
+    div.querySelector('.removeLangBtn').addEventListener('click', () => {
+      div.remove();
+      langCount--;
+      langCountInput.value = langCount;
+    });
+  }
+
+  addLangBtn.addEventListener('click', addLangField);
+  addLangField(); // Add one default language
+
+  skipLangBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('projects') }}";
+  });
+</script>
+{% endblock %}

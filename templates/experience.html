@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">Work Experience</h2>
+<p class="text-muted mb-4">Add your work experiences. You can skip this section if you don't want to include any.</p>
+
+<form method="POST">
+  <div id="expContainer"></div>
+
+  <button type="button" class="btn btn-outline-primary mb-3" id="addExpBtn">+ Add Experience</button>
+  <br>
+
+  <input type="hidden" name="experience_count" id="experience_count" value="0">
+
+  <button type="submit" class="btn btn-primary">Next: Skills</button>
+  <button type="button" class="btn btn-secondary ms-2" id="skipExpBtn">Skip</button>
+</form>
+
+<script>
+  const expContainer = document.getElementById('expContainer');
+  const addExpBtn = document.getElementById('addExpBtn');
+  const skipExpBtn = document.getElementById('skipExpBtn');
+  const expCountInput = document.getElementById('experience_count');
+  let expCount = 0;
+
+  function addExpField() {
+    expCount++;
+    expCountInput.value = expCount;
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+    div.innerHTML = `
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Job Title</label>
+          <input type="text" class="form-control" name="title_${expCount}" placeholder="Software Engineer" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Company</label>
+          <input type="text" class="form-control" name="company_${expCount}" placeholder="Tech Corp" required>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Start Date</label>
+          <input type="month" class="form-control" name="start_${expCount}" placeholder="2022-01">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">End Date</label>
+          <input type="month" class="form-control" name="end_${expCount}" placeholder="2023-01">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description / Responsibilities</label>
+          <textarea class="form-control" name="description_${expCount}" rows="2" placeholder="Describe your role and achievements"></textarea>
+        </div>
+        <div class="col-12 text-end">
+          <button type="button" class="btn btn-outline-danger btn-sm removeExpBtn">Remove</button>
+        </div>
+      </div>
+    `;
+    expContainer.appendChild(div);
+
+    div.querySelector('.removeExpBtn').addEventListener('click', () => {
+      div.remove();
+      expCount--;
+      expCountInput.value = expCount;
+    });
+  }
+
+  addExpBtn.addEventListener('click', addExpField);
+  addExpField(); // Add one default experience
+
+  skipExpBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('skills') }}";
+  });
+</script>
+{% endblock %}

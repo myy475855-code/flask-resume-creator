@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">Skills</h2>
+<p class="text-muted mb-4">Add your technical and soft skills. You can skip this section if you don't want to include any.</p>
+
+<form method="POST">
+  <div id="skillsContainer"></div>
+
+  <button type="button" class="btn btn-outline-primary mb-3" id="addSkillBtn">+ Add Skill</button>
+  <br>
+
+  <input type="hidden" name="skills_count" id="skills_count" value="0">
+
+  <button type="submit" class="btn btn-primary">Next: Languages</button>
+  <button type="button" class="btn btn-secondary ms-2" id="skipSkillsBtn">Skip</button>
+</form>
+
+<script>
+  const skillsContainer = document.getElementById('skillsContainer');
+  const addSkillBtn = document.getElementById('addSkillBtn');
+  const skipSkillsBtn = document.getElementById('skipSkillsBtn');
+  const skillsCountInput = document.getElementById('skills_count');
+  let skillCount = 0;
+
+  function addSkillField() {
+    skillCount++;
+    skillsCountInput.value = skillCount;
+
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+    div.innerHTML = `
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Skill Name</label>
+          <input type="text" class="form-control" name="name_${skillCount}" placeholder="Python" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Type</label>
+          <select class="form-select" name="type_${skillCount}">
+            <option value="Technical">Technical</option>
+            <option value="Soft">Soft</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Proficiency Level</label>
+          <select class="form-select" name="level_${skillCount}">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+            <option value="Expert">Expert</option>
+          </select>
+        </div>
+        <div class="col-md-1 text-end">
+          <button type="button" class="btn btn-outline-danger btn-sm removeSkillBtn">Remove</button>
+        </div>
+      </div>
+    `;
+    skillsContainer.appendChild(div);
+
+    div.querySelector('.removeSkillBtn').addEventListener('click', () => {
+      div.remove();
+      skillCount--;
+      skillsCountInput.value = skillCount;
+    });
+  }
+
+  addSkillBtn.addEventListener('click', addSkillField);
+  addSkillField(); // Add one default skill
+
+  skipSkillsBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('languages') }}";
+  });
+</script>
+{% endblock %}

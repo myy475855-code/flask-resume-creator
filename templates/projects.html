@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">Projects</h2>
+<p class="text-muted mb-4">Add your projects. You can skip this section if you don't want to include any.</p>
+
+<form method="POST">
+  <div id="projectContainer"></div>
+
+  <button type="button" class="btn btn-outline-primary mb-3" id="addProjectBtn">+ Add Project</button>
+  <br>
+
+  <input type="hidden" name="projects_count" id="projects_count" value="0">
+
+  <button type="submit" class="btn btn-primary">Next: Certifications</button>
+  <button type="button" class="btn btn-secondary ms-2" id="skipProjectBtn">Skip</button>
+</form>
+
+<script>
+  const projectContainer = document.getElementById('projectContainer');
+  const addProjectBtn = document.getElementById('addProjectBtn');
+  const skipProjectBtn = document.getElementById('skipProjectBtn');
+  const projectCountInput = document.getElementById('projects_count');
+  let projectCount = 0;
+
+  function addProjectField() {
+    projectCount++;
+    projectCountInput.value = projectCount;
+
+    const div = document.createElement('div');
+    div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+    div.innerHTML = `
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Project Title</label>
+          <input type="text" class="form-control" name="title_${projectCount}" placeholder="Personal Portfolio Website" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Technologies Used</label>
+          <input type="text" class="form-control" name="tech_${projectCount}" placeholder="HTML, CSS, JavaScript, Flask">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">GitHub / Repository Link</label>
+          <input type="url" class="form-control" name="github_${projectCount}" placeholder="https://github.com/username/project">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Live Project Link (Optional)</label>
+          <input type="url" class="form-control" name="live_${projectCount}" placeholder="https://yourproject.com">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Project Description</label>
+          <textarea class="form-control" name="description_${projectCount}" rows="3" placeholder="Describe the project, features, and your role"></textarea>
+        </div>
+        <div class="col-12 text-end">
+          <button type="button" class="btn btn-outline-danger btn-sm removeProjectBtn">Remove</button>
+        </div>
+      </div>
+    `;
+    projectContainer.appendChild(div);
+
+    div.querySelector('.removeProjectBtn').addEventListener('click', () => {
+      div.remove();
+      projectCount--;
+      projectCountInput.value = projectCount;
+    });
+  }
+
+  addProjectBtn.addEventListener('click', addProjectField);
+  addProjectField(); // Add one default project
+
+  skipProjectBtn.addEventListener('click', () => {
+    window.location.href = "{{ url_for('certifications') }}";
+  });
+</script>
+{% endblock %}
