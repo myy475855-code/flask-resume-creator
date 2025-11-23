@@ -1,12 +1,27 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # Required for session storage
+
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Home / Personal Info
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
+        
+        photo_file = request.files.get('photo')
+        photo_filename = None
+
+        if photo_file and photo_file.filename != "":
+            filename = secure_filename(photo_file.filename)
+            photo_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            photo_file.save(photo_path)
+            photo_filename = filename  # store only filename
+            
         session['personal_info'] = {
             'name': request.form.get('name'),
             'contact': request.form.get('contact'),
@@ -128,7 +143,7 @@ def certifications():
 # Resume Preview
 @app.route("/preview")
 def preview():
-    return render_template("preview.html", data=session)
+    return render_template("preview2.html", data=session)
 
 if __name__ == "__main__":
     app.run(debug=True)
