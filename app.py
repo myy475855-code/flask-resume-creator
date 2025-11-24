@@ -13,14 +13,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 def index():
     if request.method == "POST":
         
-        photo_file = request.files.get('photo')
-        photo_filename = None
-
-        if photo_file and photo_file.filename != "":
-            filename = secure_filename(photo_file.filename)
-            photo_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            photo_file.save(photo_path)
-            photo_filename = filename  # store only filename
+        
             
         session['personal_info'] = {
             'name': request.form.get('name'),
@@ -30,11 +23,23 @@ def index():
             'description': request.form.get('description'),
             'socials': []
         }
+        
+        photo_file = request.files.get('photo')
+        photo_filename = None
+
+        if photo_file and photo_file.filename != "":
+            filename = secure_filename(photo_file.filename)
+            photo_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            photo_file.save(photo_path)
+            photo_filename = filename  
+            session['personal_info'].append({'photo': photo_filename})
+            
         for i in range(1, 6):
             site = request.form.get(f'social_site_{i}')
             link = request.form.get(f'social_link_{i}')
             if site and link:
                 session['personal_info']['socials'].append({'site': site, 'link': link})
+
         return redirect(url_for('education'))
     return render_template("index.html")
 
@@ -137,13 +142,37 @@ def certifications():
             year = request.form.get(f'year_{i}')
             if name:
                 session['certifications'].append({'name': name,'org': org,'year': year})
-        return redirect(url_for('preview'))
+        return redirect(url_for('choose_template'))
     return render_template("certifications.html")
 
-# Resume Preview
-@app.route("/preview")
-def preview():
+@app.route("/choose-template")
+def choose_template():
+    return render_template("templates.html")
+
+@app.route("/preview1")
+def preview1():
+    return render_template("preview1.html", data=session)
+
+@app.route("/preview2")
+def preview2():
     return render_template("preview2.html", data=session)
+
+@app.route("/preview3")
+def preview3():
+    return render_template("preview3.html", data=session)
+
+@app.route("/preview4")
+def preview4():
+    return render_template("preview4.html", data=session)
+
+@app.route("/preview5")
+def preview5():
+    return render_template("preview5.html", data=session)
+
+@app.route("/preview6")
+def preview6():
+    return render_template("preview6.html", data=session)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

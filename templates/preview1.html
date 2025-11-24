@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block styling %}
+        body {
+            background: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
+        .resume-wrapper {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .left-col {
+            background: #ff6b2c;
+            color: white;
+            padding: 30px;
+            min-height: 100%;
+        }
+
+        .profile-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-top: 25px;
+            border-bottom: 2px solid rgba(255,255,255,0.6);
+            padding-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .section-title-right {
+            font-weight: bold;
+            margin-top: 30px;
+            font-size: 1.2rem;
+            color: #ff6b2c;
+        }
+
+        .entry-title {
+            font-weight: 600;
+        }
+
+        .muted {
+            color: #777;
+        }
+{% endblock %}
+{% block resume %}
+
+<div class="resume-wrapper row g-0">
+
+    <!-- LEFT COLUMN -->
+    <aside class="col-md-4 left-col">
+        <div class="text-center mb-3">
+            {% if data.personal_info.photo %}
+                <img src="{{ url_for('static', filename='uploads/' + data.personal_info.photo) }}" class="profile-img">
+            {% else %}
+                <img src="{{ url_for('static', filename='pro.jpg') }}" class="profile-img">
+            {% endif %}
+        </div>
+
+        <h5 class="fw-bold">CONTACT</h5>
+        <p class="mb-1">{{ data.personal_info.contact }}</p>
+        <p class="mb-1">{{ data.personal_info.email }}</p>
+        <p class="mb-1">{{ data.personal_info.location }}</p>
+
+        {% if data.personal_info.socials %}
+        <h5 class="section-title">SOCIAL LINKS</h5>
+        <ul>
+            {% for s in data.personal_info.socials %}
+                <li><strong>{{ s.site }}:</strong> {{ s.link }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if data.skills %}
+        <h5 class="section-title">SKILLS</h5>
+        <ul>
+            {% for item in data.skills %}
+                <li>{{ item.name }} — {{ item.level }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if data.languages %}
+        <h5 class="section-title">LANGUAGES</h5>
+        <ul>
+            {% for lang in data.languages %}
+                <li>{{ lang.language }} — {{ lang.level }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </aside>
+
+    <!-- RIGHT COLUMN -->
+    <section class="col-md-8 p-4">
+
+        <h2 class="fw-bold">{{ data.personal_info.name }}</h2>
+        <h5 class="muted">{{ data.personal_info.description }}</h5>
+
+        <!-- PROFILE -->
+        <h4 class="section-title-right">PROFESSIONAL PROFILE</h4>
+        <p>{{ data.personal_info.description }}</p>
+
+        <!-- EXPERIENCE -->
+        {% if data.experience %}
+        <h4 class="section-title-right">WORK EXPERIENCE</h4>
+        {% for job in data.experience %}
+            <div class="mb-3">
+                <div class="entry-title">{{ job.title }}</div>
+                <div class="muted">{{ job.company }} — {{ job.start }} to {{ job.end }}</div>
+                <p class="mt-2">{{ job.description }}</p>
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- EDUCATION -->
+        {% if data.education %}
+        <h4 class="section-title-right">ACADEMIC HISTORY</h4>
+        {% for edu in data.education %}
+            <div class="mb-3">
+                <div class="entry-title">{{ edu.degree }}</div>
+                <div class="muted">{{ edu.school }} — {{ edu.start }} to {{ edu.end }}</div>
+                <p>{{ edu.notes }}</p>
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- PROJECTS -->
+        {% if data.projects %}
+        <h4 class="section-title-right">PROJECTS</h4>
+        {% for p in data.projects %}
+            <div class="mb-3">
+                <div class="entry-title">{{ p.title }}</div>
+                <div class="muted">Tech: {{ p.tech }}</div>
+                <p>{{ p.description }}</p>
+                {% if p.github %}<p><strong>GitHub:</strong> {{ p.github }}</p>{% endif %}
+                {% if p.live %}<p><strong>Live Link:</strong> {{ p.live }}</p>{% endif %}
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- CERTIFICATIONS -->
+        {% if data.certifications %}
+        <h4 class="section-title-right">CERTIFICATIONS</h4>
+        {% for c in data.certifications %}
+            <p><strong>{{ c.name }}</strong> — {{ c.org }} ({{ c.year }})</p>
+        {% endfor %}
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}

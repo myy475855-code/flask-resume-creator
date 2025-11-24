@@ -3,22 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume </title>
+  <title>Resume</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.5/font/bootstrap-icons.css" rel="stylesheet">
-  
+
   <style>
     {% block styling %}{% endblock %}
   </style>
 </head>
-<body>
-    {% block resume %}{% endblock %}
 
-    <div class="d-flex justify-content-between align-items-start mb-3">
-            <div class="no-print text-end">
-              <a class="btn btn-primary btn-sm" href="#download" onclick="window.print()"><i class="bi bi-download"></i> Download</a>
-            </div>
+<body>
+
+    <!-- Area that will be converted to PDF -->
+    <div id="resumeArea">
+        {% block resume %}{% endblock %}
     </div>
+
+    <!-- Button (won’t be included in the PDF) -->
+    <div class="d-flex justify-content-center align-items-center mt-4">
+        <button class="btn btn-primary btn-lg" onclick="downloadPDF()">
+            <i class="bi bi-download"></i> Download PDF
+        </button>
+    </div>
+
+    <!-- Html2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+      function downloadPDF() {
+        const element = document.getElementById("resumeArea");
+
+        const opt = {
+          margin:       0.5,
+          filename:     'resume.pdf',
+          image:        { type: 'jpeg', quality: 1 },
+          html2canvas:  { scale: 2, useCORS: true },
+          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().from(element).set(opt).save();
+      }
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

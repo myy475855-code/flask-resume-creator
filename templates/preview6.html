@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block styling %}
+          body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+        .resume-wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #fff;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+            display: flex;
+        }
+        /* LEFT SIDEBAR */
+        .left-col {
+            width: 35%;
+            background: linear-gradient(180deg, #143c88, #7a3f8f);
+            padding: 30px;
+            color: white;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+        .left-title {
+            font-weight: bold;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+    }
+
+        .left-col ul {
+            padding-left: 18px;
+        }
+
+        /* RIGHT SIDE */
+        .right-col {
+            width: 65%;
+            padding: 40px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: #5b4789;
+            margin-bottom: 10px;
+        }
+
+        .job-title {
+            font-weight: bold;
+            margin-top: 18px;
+        }
+
+        .muted {
+            color: #666;
+        }
+
+{% endblock %}
+{% block resume %}
+
+<div class="resume-wrapper">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="left-col">
+        {% if data.personal_info.photo %}
+            <img src="{{ url_for('static', filename='uploads/' + data.personal_info.photo) }}" class="profile-img">
+        {% else %}
+            <img src="{{ url_for('static', filename='pro.jpg') }}" class="profile-img">
+        {% endif %}
+
+        <h2 class="text-center">{{ data.personal_info.name }}</h2>
+        <p class="text-center">{{ data.personal_info.description }}</p>
+
+        <div class="left-title">CONTACT</div>
+        <p>{{ data.personal_info.contact }}</p>
+        <p>{{ data.personal_info.email }}</p>
+        <p>{{ data.personal_info.location }}</p>
+
+        {% if data.personal_info.socials %}
+        <div class="left-title">SOCIAL LINKS</div>
+        <ul>
+            {% for s in data.personal_info.socials %}
+                <li><strong>{{ s.site }}:</strong> {{ s.link }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if data.languages %}
+        <div class="left-title">LANGUAGES</div>
+        <ul>
+            {% for l in data.languages %}
+                <li>{{ l.language }} – {{ l.level }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </aside>
+
+    <!-- RIGHT COLUMN -->
+    <section class="right-col">
+
+        <!-- EXPERIENCE -->
+        {% if data.experience %}
+            <div class="section-title">EXPERIENCE</div>
+            {% for exp in data.experience %}
+                <div class="job-title">{{ exp.title }}</div>
+                <div class="muted">{{ exp.company }} | {{ exp.start }} – {{ exp.end }}</div>
+                <ul>
+                    <li>{{ exp.description }}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+
+        <!-- EDUCATION -->
+        {% if data.education %}
+            <div class="section-title">EDUCATION</div>
+            {% for edu in data.education %}
+                <p class="job-title">{{ edu.degree }}</p>
+                <p class="muted">{{ edu.school }} | {{ edu.start }} – {{ edu.end }}</p>
+                <p>{{ edu.notes }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <!-- SKILLS -->
+        {% if data.skills %}
+            <div class="section-title">SKILLS</div>
+            <ul>
+                {% for s in data.skills %}
+                    <li>{{ s.name }} — {{ s.level }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- PROJECTS -->
+        {% if data.projects %}
+            <div class="section-title">PROJECTS</div>
+            {% for p in data.projects %}
+                <p class="job-title">{{ p.title }}</p>
+                <p>Tech: {{ p.tech }}</p>
+                <p>{{ p.description }}</p>
+                {% if p.github %}<p><strong>GitHub:</strong> {{ p.github }}</p>{% endif %}
+                {% if p.live %}<p><strong>Live:</strong> {{ p.live }}</p>{% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- CERTIFICATIONS -->
+        {% if data.certifications %}
+            <div class="section-title">CERTIFICATIONS</div>
+            {% for c in data.certifications %}
+                <p><strong>{{ c.name }}</strong> — {{ c.org }} ({{ c.year }})</p>
+            {% endfor %}
+        {% endif %}
+
+    </section>
+
+</div>
+{% endblock %}
