@@ -12,8 +12,6 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        
-        
             
         session['personal_info'] = {
             'name': request.form.get('name'),
@@ -176,3 +174,4 @@ def preview6():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
