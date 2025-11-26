@@ -8,11 +8,17 @@ app.secret_key = "supersecretkey"  # Required for session storage
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Home / Personal Info
+# Home 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    return render_template("index.html")
+
+# Personal Info
+@app.route("/add_info", methods=["GET", "POST"])
+def info():
     if request.method == "POST":
-            
+        
         session['personal_info'] = {
             'name': request.form.get('name'),
             'contact': request.form.get('contact'),
@@ -39,7 +45,7 @@ def index():
                 session['personal_info']['socials'].append({'site': site, 'link': link})
 
         return redirect(url_for('education'))
-    return render_template("index.html")
+    return render_template("info.html")
 
 # Education
 @app.route("/education", methods=["GET", "POST"])
@@ -174,4 +180,3 @@ def preview6():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
