@@ -17,6 +17,15 @@
             height:80vh;
             background: linear-gradient(to bottom right, rgba(0,123,255,0.05), rgba(0,255,200,0.05));
         }
+        .slider-img {
+            height: 100vh;              /* full screen height */
+            object-fit: cover;          /* crop nicely */
+            border-radius: 0;
+        }
+        .carousel-item {
+            transition: transform 1s ease-in-out;
+        }
+
 
         .template-img {
             width: 100%;
@@ -74,7 +83,7 @@
                 <a href="{{ url_for('info') }}" class="btn btn-primary btn-lg px-4">
                     Start Creating <i class="bi bi-arrow-right"></i>
                 </a>
-                
+
             </div>
 
             <div class="d-flex justify-content-center gap-4 mt-4 text-muted small">
@@ -84,6 +93,52 @@
             </div>
         </div>
     </section>
+
+    <div id="fullSlider" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+            <!-- SLIDE 1 -->
+            <div class="carousel-item active">
+                <img src="{{ url_for('static', filename='image/Preview1.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+            <!-- SLIDE 2 -->
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='image/Preview2.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+            <!-- SLIDE 3 -->
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='image/Preview3.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+            <!-- SLIDE 4 -->
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='image/Preview4.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+            <!-- SLIDE 5 -->
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='image/Preview5.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+            <!-- SLIDE 6 -->
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='image/Preview6.jpg') }}" class="d-block w-100 slider-img">
+            </div>
+
+        </div>
+
+        <!-- CONTROLS -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#fullSlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#fullSlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+    </div>
 
 
     <!-- Footer -->
@@ -112,6 +167,12 @@
             next.querySelector('.col-md-4').cloneNode(true).appendTo(el.querySelector('.row'));
             next2.querySelector('.col-md-4').cloneNode(true).appendTo(el.querySelector('.row'));
         });
+        var myCarousel = document.querySelector('#fullSlider');
+        var carousel = new bootstrap.Carousel(myCarousel, {
+            interval: 3000,    // change speed (3 seconds)
+            ride: 'carousel'
+        });
+
     </script>
 
 
